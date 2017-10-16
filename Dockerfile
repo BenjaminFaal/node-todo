@@ -7,7 +7,22 @@ LABEL maintainer "hansschollaardt@gmail.com"
 # set a health check
 HEALTHCHECK --interval=5s \
             --timeout=5s \
-            CMD curl -f http://127.0.0.1:8080 || exit 1
+            CMD curl -f http://127.0.0.1:9090 || exit 1
+			
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package.json .
+# For npm@5 or later, copy package-lock.json as well
+# COPY package.json package-lock.json ./
+
+RUN npm install
+
+COPY . .
 
 # tell docker what port to expose
-EXPOSE 8080
+EXPOSE 9090
+CMD [ "npm", "start" ]
+
+
