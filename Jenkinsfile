@@ -10,7 +10,12 @@ node {
          * docker build on the command line */
         app = docker.build("hansschollaardt/node-todo")
     }
-
+    
+    stage('Deploy for test') {
+        /* TODO */
+        sh 'echo "This is a TODO"'
+    }
+    
     stage('Test image') {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
@@ -28,5 +33,9 @@ node {
            app.push("${env.BUILD_NUMBER}")
            app.push("latest")
          }
+    }
+    
+    stage('Deploy') {
+        sh 'echo "Now we can deploy our image for test stage"' 
     }
 }
