@@ -14,10 +14,6 @@ node {
     stage('Deploy for test') {
         /* TODO */
         sh 'echo "This is a TODO"'
-        /* STOP CONTAINER */
-        sh 'docker stop $(docker ps -q --filter ancestor=hansschollaardt/node-todo)'
-        /*sh "docker rm node-todo-test"*/
-        sh 'docker run -p 9091:9090 -d hansschollaardt/node-todo'
     }
     
     stage('Test image') {
