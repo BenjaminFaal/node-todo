@@ -12,8 +12,7 @@ node {
     }
     
     stage('Deploy for test') {
-        /* TODO */
-        sh 'echo "This is a TODO"'
+           /* dit gaat mis als er geen container draait... filter als input gebruiken om te stoppen al dan niet over te slaan? */
         sh 'docker stop $(docker ps -q --filter=ancestor="hansschollaardt/node-todo")'
         sh 'docker run -p 9090:9090 -d hansschollaardt/node-todo'
     }
@@ -22,7 +21,7 @@ node {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
         app.inside {
-            sh 'echo "Tests passed"'
+            sh 'npm test'
         }
     }
 
