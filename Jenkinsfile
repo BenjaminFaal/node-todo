@@ -1,5 +1,4 @@
 node {
-    #!groovy
     def app
 
     stage('Clone repository') {
