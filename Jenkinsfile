@@ -14,8 +14,8 @@ node {
     stage('Deploy for test') {
         /* TODO */
         sh 'echo "This is a TODO"'
-        sh 'docker stop $(docker ps -q --filter ancestor=hansschollaardt/node-todo)'
-        sh 'docker run -p 9091:9090 -d hansschollaardt/node-todo'
+        sh 'docker stop $(docker ps -q --filter=ancestor="hansschollaardt/node-todo")'
+        sh 'docker run -p 9090:9090 -d hansschollaardt/node-todo'
     }
     
     stage('Test image') {
