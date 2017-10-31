@@ -13,7 +13,10 @@ node {
     
     stage('Deploy for test') {
            /* dit gaat mis als er geen container draait... filter als input gebruiken om te stoppen al dan niet over te slaan? */
-        sh 'docker stop $(docker ps -q --filter=ancestor="hansschollaardt/node-todo")'
+        def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk "{print $1}"'
+        if (containerId) {
+            sh 'docker stop ${containerId}'
+        }
         sh 'docker run -p 9090:9090 -d hansschollaardt/node-todo'
     }
     
