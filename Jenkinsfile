@@ -14,7 +14,7 @@ node {
     stage('Deploy for test') {
            /* dit gaat mis als er geen container draait... filter als input gebruiken om te stoppen al dan niet over te slaan? */
         def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk \'{print $1}\''
-        sh "echo "Container ID: "'
+        sh 'echo "Container ID: "'
         sh 'echo "${containerId}"'
         /*if (containerId) {
             sh 'echo "Stopping container with ID ${containerId}"'
