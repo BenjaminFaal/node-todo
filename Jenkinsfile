@@ -16,11 +16,12 @@ node {
         def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk \'{print $1}\''
         sh "Container ID: "
         sh 'echo "${containerId}"'
-        if (containerId) {
+        /*if (containerId) {
             sh 'echo "Stopping container with ID ${containerId}"'
             sh 'docker stop ${containerId}'
         }
-        sh 'docker run -p 9090:9090 -d hansschollaardt/node-todo'
+        */
+        sh 'docker run -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
     }
     
     stage('Test image') {
