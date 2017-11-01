@@ -16,6 +16,9 @@ node {
         def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk \'{print $1}\''
         /*sh 'echo "Container ID: "'*/
         sh 'echo "${containerId}"'
+        sh 'echo "Stopping running test instance"'
+        sh 'docker rm -f "docker-todo-test"'
+        sh 'echo "Running test instance stopped"'
         /*if (containerId) {
             sh 'echo "Stopping container with ID ${containerId}"'
             sh 'docker stop ${containerId}'
