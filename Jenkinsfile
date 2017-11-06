@@ -30,9 +30,8 @@ node {
     stage('Test image') {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
-        sh 'npm test'
-        app.inside {
-           /* TODO sh 'npm test'*/
+        withNPM(npmrcConfig: 'npm-testconfig') { /* npm pipeline plugin */
+            sh 'npm test'
         }
     }
 
