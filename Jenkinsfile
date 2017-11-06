@@ -1,6 +1,8 @@
 pipeline {
-    def app
+    tools {nodejs "node-6.11"}
     stages{
+        def app   
+        
         stage('Initializing stage') {
             checkout scm
         }
