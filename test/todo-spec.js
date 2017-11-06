@@ -1,5 +1,9 @@
 var demoText = 'Development tools is leuk';
 
+function openHomePage() {
+    browser.get('http://localhost:9090/');
+}
+
 function getTodos() {
     return element.all(by.repeater('todo in todos'));
 }
@@ -9,8 +13,14 @@ function addDemoTodo() {
     element(by.id('addTodo')).click();
 }
 
+function deleteAll() {
+    getTodos().each(function (todo) {
+        todo.click();
+    });
+}
+
 describe('todo add', function () {
-    browser.get('http://localhost:8080/');
+    openHomePage();
 
     it('should add a todo', function () {
         addDemoTodo();
@@ -33,11 +43,21 @@ describe('todo add', function () {
     });
 
     it('should delete all todos', function () {
-        getTodos().each(function (todo) {
-            todo.click();
-        });
+        deleteAll();
 
         browser.driver.sleep(1000);
+
+        expect(getTodos().count()).toEqual(0);
+    });
+
+});
+
+describe('todo wrong', function () {
+    openHomePage();
+
+    it('should not add a todo when text empty', function () {
+        element(by.id('todoText')).clear();
+        element(by.id('addTodo')).click();
 
         expect(getTodos().count()).toEqual(0);
     });
