@@ -1,9 +1,7 @@
 pipeline {
     agent any
     tools {nodejs "node-6.11"}
-    environment {
-        def app
-    }
+
     stages{
         stage('Initializing stage') {
             steps {
@@ -14,7 +12,9 @@ pipeline {
             /* This builds the actual image; synonymous to
              * docker build on the command line */
             steps {
-                app = docker.build("hansschollaardt/node-todo")
+                script {
+                    app = docker.build("hansschollaardt/node-todo")
+                }
             }
         }
 
