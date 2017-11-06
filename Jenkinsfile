@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     tools {nodejs "node-6.11"}
     stages{
         def app
@@ -52,7 +53,9 @@ pipeline {
             }  
         }
         stage('Deploy') {
-            sh 'echo "Now we can deploy our image for test stage"' 
+            steps {
+                sh 'echo "Now we can deploy our image for test stage"' 
+            }
         }
     }
 }
