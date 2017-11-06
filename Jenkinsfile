@@ -1,4 +1,4 @@
-node {
+pipeline {
     def app
     stage('Initializing stage') {
         checkout scm
