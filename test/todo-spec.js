@@ -16,6 +16,7 @@ function addDemoTodo() {
 function deleteAll() {
     getTodos().each(function (todo) {
         todo.click();
+        browser.waitForAngular();
     });
 }
 
@@ -30,12 +31,10 @@ describe('todo add', function () {
     });
 
     it('should mark a todo done', function () {
-        addDemoTodo();
-
         var todos = getTodos();
-        todos.get(0).click();
+        todos.last().click();
 
-        browser.driver.sleep(1000);
+        browser.waitForAngular();
 
         getTodos().count().then(function (actualCount) {
             expect(todos.count()).toEqual(actualCount);
@@ -44,10 +43,8 @@ describe('todo add', function () {
 
     it('should delete all todos', function () {
         deleteAll();
-
-        browser.driver.sleep(1000);
-
-        expect(getTodos().count()).toEqual(0);
+        browser.waitForAngular();
+        expect(element.all(by.cssContainingText(demoText)).count()).toEqual(0);
     });
 
 });
@@ -56,10 +53,12 @@ describe('todo wrong', function () {
     openHomePage();
 
     it('should not add a todo when text empty', function () {
-        element(by.id('todoText')).clear();
-        element(by.id('addTodo')).click();
-
-        expect(getTodos().count()).toEqual(0);
+        getTodos().count().then(function (count) {
+            element(by.id('todoText')).clear();
+            element(by.id('addTodo')).click();
+            browser.waitForAngular();
+            expect(getTodos().count()).toEqual(count);
+        });
     });
 
 });
