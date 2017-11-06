@@ -1,8 +1,10 @@
 pipeline {
     agent any
     tools {nodejs "node-6.11"}
-    stages{
+    environment {
         def app
+    }
+    stages{
         stage('Initializing stage') {
             steps {
                 checkout scm
