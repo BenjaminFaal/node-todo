@@ -1,6 +1,5 @@
 node {
     def app
-    tools { nodejs "node-6.11"}
     stage('Initializing stage') {
         def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
         env.PATH = "${node}/bin:${env.PATH}"
@@ -33,9 +32,8 @@ node {
     stage('Test image') {
         /* Ideally, we would run a test framework against our image.
          * For this example, we're using a Volkswagen-type approach ;-) */
-        withNPM(){
-            sh 'npm test'
-        }
+        tool name: 'node-6.11'
+        sh 'npm test'
     }
 
     stage('Push image') {
