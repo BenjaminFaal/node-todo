@@ -36,6 +36,16 @@
 			<h1>I'm a Todo-aholic <span class="label label-info">{{ todos.length }}</span></h1>
 		</div>
 
+		<!--Info-->
+		<div id="info" class="alert alert-info" ng-if="info">
+			<strong>Info!</strong> {{info}}
+		</div>
+
+		<!--Errors-->
+		<div id="error" class="alert alert-danger" ng-if="error">
+			<strong>Error!</strong> {{error}}
+		</div>
+
 		<!-- TODO LIST -->
 		<div id="todo-list" class="row">
 			<div class="col-sm-4 col-sm-offset-4">

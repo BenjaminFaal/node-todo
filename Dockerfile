@@ -23,4 +23,5 @@ COPY . .
 
 # tell docker what port to expose
 EXPOSE 9090
+
 CMD [ "npm", "start" ]
