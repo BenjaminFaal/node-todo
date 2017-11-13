@@ -33,7 +33,7 @@ pipeline {
                         sh 'docker stop ${containerId}'
                     }
                     */
-                    sh 'docker run -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
+                    sh 'docker run --rm -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
                }
             }
         }
