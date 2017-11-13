@@ -8,6 +8,12 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Unit tests') {
+            steps {
+                sh 'npm install'
+                sh 'npm run unit-test'
+            }
+        }
         stage('Build image') {
             /* This builds the actual image; synonymous to
              * docker build on the command line */
@@ -29,8 +35,8 @@ pipeline {
             steps {
                 /* Ideally, we would run a test framework against our image.
                    For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm test'
-                sh 'docker stop "docker-todo-test"'
+                sh 'npm run selenium-test'
+                sh 'docker stop docker-todo-test'
             }
         }
         stage('Push image') {
