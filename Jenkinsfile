@@ -22,18 +22,18 @@ pipeline {
            steps {
                script { 
                    /* dit gaat mis als er geen container draait... filter als input gebruiken om te stoppen al dan niet over te slaan? */
-                    def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk \'{print $1}\''
+                    //def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk \'{print $1}\''
                     /*sh 'echo "Container ID: "'*/
-                    sh 'echo "${containerId}"'
-                    sh 'echo "Stopping running test instance"'
-                    sh 'docker rm -f "docker-todo-test"'
-                    sh 'echo "Running test instance stopped"'
+                    //sh 'echo "${containerId}"'
+                    //sh 'echo "Stopping running test instance"'
+                    //sh 'docker rm -f "docker-todo-test"'
+                    //sh 'echo "Running test instance stopped"'
                     /*if (containerId) {
                         sh 'echo "Stopping container with ID ${containerId}"'
                         sh 'docker stop ${containerId}'
                     }
                     */
-                    sh 'docker run -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
+                    sh 'docker run --rm -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
                }
             }
         }
@@ -41,7 +41,8 @@ pipeline {
             steps {
                 /* Ideally, we would run a test framework against our image.
                    For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm test' 	
+                sh 'npm test'
+                sh 'docker stop "docker-todo-test"'
             }
         }
         stage('Push image') {
