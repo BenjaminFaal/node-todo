@@ -35,7 +35,8 @@ pipeline {
             steps {
                 /* Ideally, we would run a test framework against our image.
                    For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm run selenium-test' 	
+                sh 'npm run selenium-test'
+                sh 'docker stop docker-todo-test'
             }
         }
         stage('Push image') {
@@ -49,9 +50,11 @@ pipeline {
                 }
             }  
         }
-        stage('Deploy') {
+        stage('Deploy Develop') {
             steps {
                 sh 'echo "Now we can deploy our image"' 
+                sh 'docker stop docker-todo-develop'
+                sh 'docker run --rm -p 80:9090 -d --name="docker-todo-develop" hansschollaardt/node-todo'
             }
         }
     }
