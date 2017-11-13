@@ -47,9 +47,12 @@ pipeline {
                 }
             }  
         }
-        stage('Deploy') {
+        stage('Deploy Productie') {
             steps {
-                sh 'echo "Now we can deploy our image for test stage"' 
+                sh 'echo "Now we can deploy our image"' 
+                // continue even if container was not running (yet)
+                sh 'docker stop docker-todo-prod || true' 
+                sh 'docker run --rm -p 80:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
             }
         }
     }
