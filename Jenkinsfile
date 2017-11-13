@@ -58,7 +58,7 @@ pipeline {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
                 sh 'docker stop docker-todo-prod || true' 
-                sh 'docker run --rm -p 80:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
+                sh 'docker run --rm -p 81:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
             }
         }
     }
