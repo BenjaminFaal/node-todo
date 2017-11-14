@@ -60,11 +60,11 @@ pipeline {
                 script {
                     app.run("--rm -p 81:9090 -d --name=docker-todo-prod", [])
                 }
-                withCredentials([usernameColonPassword(credentialsId: 'dockerhub', variable: 'DOCKER_CREDENTIALS')]) {
-                    sh 'echo ${DOCKER_CREDENTIALS}'    
-                }
-                sh 'docker stop docker-todo-prod || true' 
-                sh 'docker run --rm -p 81:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
+                //withCredentials([usernameColonPassword(credentialsId: 'dockerhub', variable: 'DOCKER_CREDENTIALS')]) {
+                //    sh 'echo ${DOCKER_CREDENTIALS}'    
+                //}
+                //sh 'docker stop docker-todo-prod || true' 
+                //sh 'docker run --rm -p 81:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
             }
         }
     }
