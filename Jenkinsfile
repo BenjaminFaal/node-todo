@@ -57,7 +57,9 @@ pipeline {
             steps {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
-                app.run("--rm -p 81:9090 -d --name=docker-todo-prod", [])
+                script {
+                    app.run("--rm -p 81:9090 -d --name=docker-todo-prod", [])
+                }
                 withCredentials([usernameColonPassword(credentialsId: 'dockerhub', variable: 'DOCKER_CREDENTIALS')]) {
                     sh 'echo ${DOCKER_CREDENTIALS}'    
                 }
