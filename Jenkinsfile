@@ -57,6 +57,9 @@ pipeline {
             steps {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
+                withCredentials([usernameColonPassword(credentialsId: 'dockerhub', variable: 'DOCKER_CREDENTIALS')]) {
+                    sh 'echo ${DOCKER_CREDENTIALS}'    
+                }
                 sh 'docker stop docker-todo-prod || true' 
                 sh 'docker run --rm -p 81:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
             }
