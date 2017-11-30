@@ -51,7 +51,7 @@ pipeline {
                 script {
 			docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
 				//container = docker.image('hansschollaardt/node-todo:prod-latest')
-				app.run('--rm -p 81:9090 -d --name="docker-todo-productie"');
+				app.run('--rm -p 82:9090 -d --name="docker-todo-productie"');
 				//sh 'docker login'
 				//sh 'docker pull hansschollaardt/node-todo:prod-latest'
 				//sh 'docker run --rm -p 81:9090 -d --name="docker-todo-productie" hansschollaardt/node-todo:prod-latest'
