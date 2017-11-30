@@ -52,7 +52,9 @@ pipeline {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
                 sh 'docker stop docker-todo-acceptatie || true' 
-                sh 'docker run --rm -p 81:9090 -d --name="docker-todo-acceptatie" hansschollaardt/node-todo:acc-latest'
+                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+			sh 'docker run --rm -p 81:9090 -d --name="docker-todo-acceptatie" hansschollaardt/node-todo:acc-latest'
+		}
             }
         }
     }
