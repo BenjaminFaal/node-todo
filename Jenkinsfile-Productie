@@ -50,7 +50,7 @@ pipeline {
                 sh 'docker stop docker-todo-productie || true' 
                 script {
 					docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-						app.run('--rm -p 82:9090 -d --name="docker-todo-productie"');
+						app.run('--rm -p 9000:9090 -d --name="docker-todo-productie"');
 					}
 				}
             }
