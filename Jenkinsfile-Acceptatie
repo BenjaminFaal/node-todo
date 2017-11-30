@@ -18,21 +18,9 @@ pipeline {
             }
         }
 
-        stage('Deploy for test') {
+        stage('Deploy for integration test') {
            steps {
                script { 
-                   /* dit gaat mis als er geen container draait... filter als input gebruiken om te stoppen al dan niet over te slaan? */
-                    def containerId = sh returnStdout: true, script: 'docker ps |  grep "9090" | awk \'{print $1}\''
-                    /*sh 'echo "Container ID: "'*/
-                    //sh 'echo "${containerId}"'
-                    //sh 'echo "Stopping running test instance"'
-                    //sh 'docker rm -f "docker-todo-test"'
-                    //sh 'echo "Running test instance stopped"'
-                    /*if (containerId) {
-                        sh 'echo "Stopping container with ID ${containerId}"'
-                        sh 'docker stop ${containerId}'
-                    }
-                    */
                     sh 'docker run --rm -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
                }
             }
@@ -41,8 +29,8 @@ pipeline {
             steps {
                 /* Ideally, we would run a test framework against our image.
                    For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm test' 	
-		sh 'docker stop "docker-todo-test"'
+                sh 'npm run selenium-test'	
+		sh 'docker stop docker-todo-test'
             }
         }
         stage('Push image') {
@@ -59,9 +47,20 @@ pipeline {
                 }
             }  
         }
-        stage('Deploy') {
+        stage('Deploy Acceptatie') {
             steps {
-                sh 'echo "Now we can deploy our image for test stage"' 
+                sh 'echo "Now we can deploy our image"' 
+                // continue even if container was not running (yet)
+                sh 'docker stop docker-todo-acceptatie || true' 
+                script {
+			docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+				//container = docker.image('hansschollaardt/node-todo:acc-latest')
+				app.run('--rm -p 81:9090 -d --name="docker-todo-acceptatie"');
+				//sh 'docker login'
+				//sh 'docker pull hansschollaardt/node-todo:acc-latest'
+				//sh 'docker run --rm -p 81:9090 -d --name="docker-todo-acceptatie" hansschollaardt/node-todo:acc-latest'
+			}
+		}
             }
         }
     }
