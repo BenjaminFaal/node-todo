@@ -8,15 +8,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Unit tests') {
-            steps {
-                sh 'npm install'
-                sh 'npm run unit-test'
-            }
-        }
         stage('Build image') {
-            /* This builds the actual image; synonymous to
-             * docker build on the command line */
             steps {
                 script {
                     app = docker.build("hansschollaardt/node-todo")
@@ -24,7 +16,7 @@ pipeline {
             }
         }
 
-        stage('Deploy for test') {
+        stage('Deploy for integration test') {
            steps {
                script { 
                     sh 'docker run --rm -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
@@ -33,10 +25,8 @@ pipeline {
         }
         stage('Test image') {
             steps {
-                /* Ideally, we would run a test framework against our image.
-                   For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm run selenium-test'
-                sh 'docker stop docker-todo-test'
+                sh 'npm run selenium-test'	
+				sh 'docker stop docker-todo-test'
             }
         }
         stage('Push image') {
@@ -53,18 +43,20 @@ pipeline {
                 }
             }  
         }
-        stage('Deploy Productie') {
+        stage('Deploy productie') {
             steps {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
+                sh 'docker stop docker-todo-productie || true' 
                 script {
-                    app.run("--rm -p 81:9090 -d --name=docker-todo-prod", [])
-                }
-                //withCredentials([usernameColonPassword(credentialsId: 'dockerhub', variable: 'DOCKER_CREDENTIALS')]) {
-                //    sh 'echo ${DOCKER_CREDENTIALS}'    
-                //}
-                //sh 'docker stop docker-todo-prod || true' 
-                //sh 'docker run --rm -p 81:9090 -d --name="docker-todo-prod" hansschollaardt/node-todo:prod-latest'
+			docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+				//container = docker.image('hansschollaardt/node-todo:prod-latest')
+				app.run('--rm -p 81:9090 -d --name="docker-todo-productie"');
+				//sh 'docker login'
+				//sh 'docker pull hansschollaardt/node-todo:prod-latest'
+				//sh 'docker run --rm -p 81:9090 -d --name="docker-todo-productie" hansschollaardt/node-todo:prod-latest'
+			}
+		}
             }
         }
     }
