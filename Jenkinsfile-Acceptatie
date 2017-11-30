@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Deploy for test') {
+        stage('Deploy for integration test') {
            steps {
                script { 
                     sh 'docker run --rm -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
@@ -29,8 +29,8 @@ pipeline {
             steps {
                 /* Ideally, we would run a test framework against our image.
                    For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm test' 	
-		sh 'docker stop "docker-todo-test"'
+                sh 'npm run selenium-test'	
+		sh 'docker stop docker-todo-test'
             }
         }
         stage('Push image') {
