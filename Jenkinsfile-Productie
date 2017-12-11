@@ -49,10 +49,10 @@ pipeline {
                 // continue even if container was not running (yet)
                 sh 'docker stop docker-todo-productie || true' 
                 script {
-					docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-						app.run('--rm -p 8001:9090 -d --name="docker-todo-productie"');
-					}
-				}
+			docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+				app.run('--rm -p 8002:9090 -d --name="docker-todo-productie"');
+			}
+		}
             }
         }
     }
