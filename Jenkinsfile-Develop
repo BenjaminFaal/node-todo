@@ -55,7 +55,7 @@ pipeline {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
                 sh 'docker stop docker-todo-develop || true' 
-                sh 'docker run --rm -p 80:9090 -d --name="docker-todo-develop" hansschollaardt/node-todo'
+                sh 'docker run --rm -p 8000:9090 -d --name="docker-todo-develop" hansschollaardt/node-todo'
             }
         }
     }
