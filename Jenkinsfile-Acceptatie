@@ -54,11 +54,7 @@ pipeline {
                 sh 'docker stop docker-todo-acceptatie || true' 
                 script {
 			docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-				//container = docker.image('hansschollaardt/node-todo:acc-latest')
-				app.run('--rm -p 81:9090 -d --name="docker-todo-acceptatie"');
-				//sh 'docker login'
-				//sh 'docker pull hansschollaardt/node-todo:acc-latest'
-				//sh 'docker run --rm -p 81:9090 -d --name="docker-todo-acceptatie" hansschollaardt/node-todo:acc-latest'
+				app.run('--rm -p 8001:9090 -d --name="docker-todo-acceptatie"');
 			}
 		}
             }
