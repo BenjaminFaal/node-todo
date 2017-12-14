@@ -27,7 +27,7 @@ pipeline {
         stage('Deploy for integration test') {
            steps {
                script { 
-                    sh 'docker run --rm -p ${env.PORT}:${env.PORT} -e "PORT=${env.PORT}" -d --name="docker-todo-test" hansschollaardt/node-todo'
+                    sh 'docker run --rm -p ${params.PORT}:${params.PORT} -e "PORT=${params.PORT}" -d --name="docker-todo-test" hansschollaardt/node-todo'
                }
             }
         }
