@@ -1,7 +1,9 @@
 pipeline {
     agent any
     tools {nodejs "node-6.11"}
-
+    parameters {
+        string(name: 'PORT', defaultValue: '1111')
+    }
     stages{
         stage('Initializing stage') {
             steps {
