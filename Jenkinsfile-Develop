@@ -32,7 +32,8 @@ pipeline {
             echo "Port in step: ${params.PORT}"
                script { 
                     echo "Port in script: ${params.PORT}"
-                    sh 'docker run --rm -p ${params.PORT}:${params.PORT} -e "PORT=${params.PORT}" -d --name="docker-todo-test" hansschollaardt/node-todo'
+                    sh 'echo "Port in script: ${params.PORT}"'
+                    sh 'docker run --rm -p "${params.PORT}:${params.PORT}" -e "PORT=${params.PORT}" -d --name="docker-todo-test" hansschollaardt/node-todo'
                }
             }
         }
