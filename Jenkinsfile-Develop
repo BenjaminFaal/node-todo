@@ -30,11 +30,11 @@ pipeline {
         stage('Deploy for integration test') {
            steps {
             echo "Port in step: ${params.PORT}"
-               script { 
+              /* script {  */
                     echo "Port in script: ${params.PORT}"
                     sh 'echo ${params.PORT}'
                     sh 'docker run --rm -p "${params.PORT}:${params.PORT}" -e "PORT=${params.PORT}" -d --name="docker-todo-test" hansschollaardt/node-todo'
-               }
+             /*  } */
             }
         }
         stage('Test image') {
