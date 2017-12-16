@@ -1,10 +1,13 @@
 pipeline {
     agent any
     tools {nodejs "node-6.11"}
-
+    parameters {
+        string(name: 'PORT', defaultValue: '1111')
+    }
     stages{
         stage('Initializing stage') {
             steps {
+                echo "Port: ${params.PORT}"
                 checkout scm
             }
         }
@@ -26,9 +29,10 @@ pipeline {
 
         stage('Deploy for integration test') {
            steps {
-               script { 
-                    sh 'docker run --rm -p ${env.PORT}:${env.PORT} -e "PORT=${env.PORT}" -d --name="docker-todo-test" hansschollaardt/node-todo'
-               }
+            echo "Port in step: ${params.PORT}"
+               echo "Port in script: ${params.PORT}"
+               sh "echo ${params.PORT}"
+               sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
             }
         }
         stage('Test image') {
@@ -36,7 +40,7 @@ pipeline {
                 /* Ideally, we would run a test framework against our image.
                    For this example, we're using a Volkswagen-type approach ;-) */
                 sh 'npm run selenium-test'
-                sh 'docker stop docker-todo-test'
+                sh 'docker stop test-develop'
             }
         }
         stage('Push image') {
