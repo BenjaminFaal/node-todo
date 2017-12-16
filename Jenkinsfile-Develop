@@ -23,17 +23,16 @@ pipeline {
                 }
             }
         }
-
         stage('Deploy for integration test') {
            steps {
                sh "echo Running instance on port: ${params.PORT}"
                sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
             }
         }
-        stage('Test image') {
+        stage('Integration test image') {
             steps {
                 sh 'npm run selenium-test'
-                sh 'docker stop test-develop'
+                sh 'docker stop test-develop || true'
             }
         }
         stage('Push image') {
