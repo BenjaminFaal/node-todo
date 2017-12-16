@@ -28,7 +28,7 @@ pipeline {
            steps {
                script { 
 					sh "echo Running instance on port: ${params.PORT}"
-                    sh 'docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name="test-acceptatie" hansschollaardt/node-todo'
+                    sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-acceptatie hansschollaardt/node-todo"
                }
             }
         }
