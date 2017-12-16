@@ -7,7 +7,6 @@ pipeline {
     stages{
         stage('Initializing stage') {
             steps {
-                echo "Port: ${params.PORT}"
                 checkout scm
             }
         }
@@ -30,15 +29,12 @@ pipeline {
         stage('Deploy for integration test') {
            steps {
             echo "Port in step: ${params.PORT}"
-               echo "Port in script: ${params.PORT}"
-               sh "echo ${params.PORT}"
+               sh "echo Running instance on port: ${params.PORT}"
                sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
             }
         }
         stage('Test image') {
             steps {
-                /* Ideally, we would run a test framework against our image.
-                   For this example, we're using a Volkswagen-type approach ;-) */
                 sh 'npm run selenium-test'
                 sh 'docker stop test-develop'
             }
