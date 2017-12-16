@@ -27,7 +27,6 @@ pipeline {
         stage('Deploy for integration test') {
            steps {
                script { 
-                    sh "docker stop test-productie || true"
 					sh "echo Running instance on port: ${params.PORT}"
                     sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-productie hansschollaardt/node-todo"
                }
