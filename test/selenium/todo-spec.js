@@ -1,7 +1,7 @@
 var demoText = 'Development tools is leuk';
 
 function openHomePage() {
-    browser.get('http://37.97.180.18:9090/');
+    browser.get('http://37.97.180.18:' + process.env.PORT);
 }
 
 function getTodos() {

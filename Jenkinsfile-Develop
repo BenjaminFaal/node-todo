@@ -1,7 +1,9 @@
 pipeline {
     agent any
     tools {nodejs "node-6.11"}
-
+    parameters {
+        string(name: 'PORT', defaultValue: '1111')
+    }
     stages{
         stage('Initializing stage') {
             steps {
@@ -10,31 +12,27 @@ pipeline {
         }
         stage('Unit tests') {
             steps {
+                sh 'npm install'
                 sh 'npm run unit-test'
             }
         }
         stage('Build image') {
-            /* This builds the actual image; synonymous to
-             * docker build on the command line */
             steps {
                 script {
                     app = docker.build("hansschollaardt/node-todo")
                 }
             }
         }
-
         stage('Deploy for integration test') {
            steps {
-               script { 
-                    sh 'docker run --rm -p 9090:9090 -d --name="docker-todo-test" hansschollaardt/node-todo'
-               }
+               sh "echo Running instance on port: ${params.PORT}"
+               sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
             }
         }
-        stage('Test image') {
+        stage('Integration test image') {
             steps {
-                /* Ideally, we would run a test framework against our image.
-                   For this example, we're using a Volkswagen-type approach ;-) */
-                sh 'npm run selenium-test' 	
+                sh 'npm run selenium-test'
+                sh 'docker stop test-develop || true'
             }
         }
         stage('Push image') {
@@ -48,9 +46,11 @@ pipeline {
                 }
             }  
         }
-        stage('Deploy') {
+        stage('Deploy Develop') {
             steps {
-                sh 'echo "Now we can deploy our image"' 
+                // continue even if container was not running (yet)
+                sh 'docker stop docker-todo-develop || true' 
+                sh 'docker run --rm -p 8000:9090 -d --name="docker-todo-develop" hansschollaardt/node-todo'
             }
         }
     }
