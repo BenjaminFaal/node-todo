@@ -17,8 +17,6 @@ pipeline {
             }
         }
         stage('Build image') {
-            /* This builds the actual image; synonymous to
-             * docker build on the command line */
             steps {
                 script {
                     app = docker.build("hansschollaardt/node-todo")
@@ -28,7 +26,6 @@ pipeline {
 
         stage('Deploy for integration test') {
            steps {
-            echo "Port in step: ${params.PORT}"
                sh "echo Running instance on port: ${params.PORT}"
                sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
             }
