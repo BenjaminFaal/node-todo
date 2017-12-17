@@ -39,10 +39,6 @@ pipeline {
             /* finally, if all went well: publish image */
             steps {
 				script {
-					def userInput = input(
-						id: 'Proceed1', message: 'Deploy?', parameters: [
-						[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Ready to deploy?']
-					])
 					docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
 					   app.push("dev-${env.BUILD_NUMBER}")
 					   app.push("dev-latest")
