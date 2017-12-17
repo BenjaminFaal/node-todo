@@ -41,7 +41,7 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+					docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                        app.push("prod-${env.BUILD_NUMBER}")
                        app.push("prod-latest")
                     }
@@ -52,11 +52,15 @@ pipeline {
             steps {
                 sh 'echo "Now we can deploy our image"' 
                 // continue even if container was not running (yet)
-                sh 'docker stop docker-todo-productie || true' 
+                 def userInput = input(
+						id: 'Proceed1', message: 'Deploy?', parameters: [
+						[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Ready to deploy?']
+					])
+				sh 'docker stop docker-todo-productie || true' 
                 script {
-			docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-				app.run('--rm -p 8002:9090 -d --name="docker-todo-productie"');
-			}
+					docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+						app.run('--rm -p 8002:9090 -d --name="docker-todo-productie"');
+					}
 		}
             }
         }
