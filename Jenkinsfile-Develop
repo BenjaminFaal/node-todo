@@ -3,7 +3,7 @@ pipeline {
     tools {nodejs "node-6.11"}
     parameters {
         string(name: 'PORT', defaultValue: '1111')
-	string(name: 'ENVIRONMENT_DB', defaultValue: 'development'
+	string(name: 'ENVIRONMENT_DB', defaultValue: 'development')
     }
     stages{
         stage('Initializing stage') {
