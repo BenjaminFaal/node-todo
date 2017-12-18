@@ -3,6 +3,7 @@ pipeline {
     tools {nodejs "node-6.11"}
     parameters {
         string(name: 'PORT', defaultValue: '1111')
+	string(name: 'ENVIRONMENT_DB', defaultValue: 'development'
     }
     stages{
         stage('Initializing stage') {
@@ -26,7 +27,7 @@ pipeline {
         stage('Deploy for integration test') {
            steps {
                sh "echo Running instance on port: ${params.PORT}"
-               sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
+               sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -e ENVIRONMENT_DB=testing --link mongodb:mongodb -d --name=test-develop hansschollaardt/node-todo"
             }
         }
         stage('Integration test image') {
@@ -50,7 +51,7 @@ pipeline {
             steps {
                 // continue even if container was not running (yet)
                 sh 'docker stop docker-todo-develop || true' 
-                sh 'docker run --rm -p 8000:9090 -d --name="docker-todo-develop" hansschollaardt/node-todo'
+                sh "docker run --rm -p 8000:9090 -e ENVIRONMENT_DB=${params.ENVIRONMENT_DB} --link mongodb:mongodb -d --name=docker-todo-develop hansschollaardt/node-todo"
             }
         }
     }
