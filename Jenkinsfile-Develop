@@ -60,7 +60,7 @@ pipeline {
             // Iets doen met test results
         }
         failure {
-            mail to: hansschollaardt@gmail.com, subject: 'Pipeline Node-Todo Develop gefaald :('
+	    mail bcc: '', body: "<b>Example</b><br>\n\<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
         }
     }
 }
