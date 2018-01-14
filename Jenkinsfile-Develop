@@ -55,4 +55,12 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            // Iets doen met test results
+        }
+        failure {
+            mail to: hansschollaardt@gmail.com, subject: 'Pipeline Node-Todo Develop gefaald :('
+        }
+    }
 }
