@@ -5,10 +5,6 @@ pipeline {
         string(name: 'PORT', defaultValue: '1111')
 	string(name: 'ENVIRONMENT_DB', defaultValue: 'development')
     }
-    environment {
-    	BUILD_ID =  1 // ${env.BUILD_ID}
-        //BRANCH_NAME = getGitBranchName()
-    } 
     stages{
         stage('Initializing stage') {
             steps {
@@ -21,7 +17,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run unit-test'
 		echo 'Copying coverage report'
-		sh "cp -R coverage/lcov-report /var/www/html/coverage/"+getGitBranchName()
+		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-{$env.BUILD_ID}"
             }
         }
         stage('Build image') {
@@ -71,8 +67,4 @@ pipeline {
 	    mail bcc: '', body: "Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
         }
     }
-}
-
-def getGitBranchName() {
-    return scm.branches[0].name + '-' + ${env.BUILD_ID}
 }
