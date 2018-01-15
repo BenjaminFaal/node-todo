@@ -16,12 +16,6 @@ pipeline {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
-		echo 'Copying coverage report'
-		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-${env.BUILD_ID}"
-		script {
-			def jshint_html = sh(script: "jshint --reporter=node_modules/jshint-html-reporter/reporter.js *.js app/**/*.js public/**/*.js || true" , returnStdout: true)
-			writeFile (file:"/var/www/html/coverage/develop-${env.BUILD_ID}/jshint.html", text: jshint_html)
-		}
             }
         }
         stage('Build image') {
@@ -63,7 +57,16 @@ pipeline {
         }
     }
     post {
-        success {
+        always {
+	    	// Publish reports
+		echo 'Copying coverage report'
+		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-${env.BUILD_ID}"
+		script {
+			def jshint_html = sh(script: "jshint --reporter=node_modules/jshint-html-reporter/reporter.js *.js app/**/*.js public/**/*.js || true" , returnStdout: true)
+			writeFile (file:"/var/www/html/coverage/develop-${env.BUILD_ID}/jshint.html", text: jshint_html)
+		}
+	}
+	success {
             mail bcc: '', body: "Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'hansschollaardt@gmail.com', mimeType: 'text/html', replyTo: '', subject: "SUCCESS CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
         }
         failure {
