@@ -22,7 +22,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run unit-test'
 		echo 'Copying coverage report'
-		sh "cp -R coverage/lcov-report /var/www/html/coverage/${BRANCH_NAME}/${env.BUILD_ID}"
+		sh "cp -R coverage/lcov-report /var/www/html/coverage/${BRANCH_NAME}"
             }
         }
         stage('Build image') {
@@ -75,5 +75,5 @@ pipeline {
 }
 
 def getGitBranchName() {
-    return scm.branches[0].name
+    return scm.branches[0].name + '-' + 1
 }
