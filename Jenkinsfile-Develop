@@ -75,5 +75,5 @@ pipeline {
 }
 
 def getGitBranchName() {
-    return scm.branches[0].name + '-' + 1
+    return scm.branches[0].name + '-' + ${env.BUILD_ID}
 }
