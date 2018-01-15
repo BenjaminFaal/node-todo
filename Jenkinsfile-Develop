@@ -17,7 +17,9 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run unit-test'
 		echo 'Copying coverage report'
-		sh "cp -R coverage/lcov-report /var/www/html/coverage/${env.BRANCH_NAME}/${env.BUILD_ID}"
+		echo 'Branch name: '
+		echo getGitBranchName()
+		sh "cp -R coverage/lcov-report /var/www/html/coverage/${env.BUILD_ID}"
             }
         }
         stage('Build image') {
@@ -67,4 +69,8 @@ pipeline {
 	    mail bcc: '', body: "Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
         }
     }
+}
+
+def getGitBranchName() {
+    return scm.branches[0].name
 }
