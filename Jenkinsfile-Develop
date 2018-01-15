@@ -9,7 +9,8 @@ pipeline {
         stage('Initializing stage') {
             steps {
 	    	checkout scm
-		echo scm.branches[0].name
+		BRANCH_NAME = getGitBranchName()
+		echo "Branch name: ${BRANCH_NAME}"  
 		echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
@@ -18,7 +19,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run unit-test'
 		echo 'Copying coverage report'
-		sh "cp -R coverage/lcov-report /var/www/html/coverage/${env.BUILD_ID}"
+		sh "cp -R coverage/lcov-report /var/www/html/coverage/${BRANCH_NAME}/${env.BUILD_ID}"
             }
         }
         stage('Build image') {
