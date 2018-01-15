@@ -15,7 +15,8 @@ pipeline {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
-		sh 'pwd'
+		echo 'Copying coverage report'
+		sh 'cp coverage/lcov-report ~/Coverage/'
             }
         }
         stage('Build image') {
