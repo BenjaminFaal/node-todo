@@ -75,5 +75,5 @@ pipeline {
 }
 
 def getGitBranchName() {
-    return scm.branches[0].name + '-' + buildId
+    return scm.branches[0].name
 }
