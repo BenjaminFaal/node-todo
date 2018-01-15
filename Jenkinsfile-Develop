@@ -13,7 +13,6 @@ pipeline {
         stage('Initializing stage') {
             steps {
 	    	checkout scm
-		echo "Branch name: ${BRANCH_NAME}"  
 		echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
