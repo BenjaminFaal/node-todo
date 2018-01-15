@@ -9,6 +9,7 @@ pipeline {
         stage('Initializing stage') {
             steps {
                 checkout scm
+		echo pwd
             }
         }
         stage('Unit tests') {
