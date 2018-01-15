@@ -8,6 +8,7 @@ pipeline {
     stages{
         stage('Initializing stage') {
             steps {
+	    	echo 'Build name: ${env.BUILD_NAME}' 
                 checkout scm
             }
         }
@@ -16,7 +17,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run unit-test'
 		echo 'Copying coverage report'
-		sh 'cp -R coverage/lcov-report /var/www/html/coverage/${env.BUILD_NAME}'
+		sh 'cp -R coverage/lcov-report /var/www/html/coverage'
             }
         }
         stage('Build image') {
