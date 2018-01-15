@@ -7,7 +7,7 @@ pipeline {
     }
     environment {
     	BUILD_ID =  1 // ${env.BUILD_ID}
-        BRANCH_NAME = getGitBranchName(BUILD_ID)
+        BRANCH_NAME = getGitBranchName()
     } 
     stages{
         stage('Initializing stage') {
@@ -74,6 +74,6 @@ pipeline {
     }
 }
 
-def getGitBranchName(String buildId) {
+def getGitBranchName() {
     return scm.branches[0].name + '-' + buildId
 }
