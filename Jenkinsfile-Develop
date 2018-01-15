@@ -58,7 +58,8 @@ pipeline {
     }
     post {
         always {
-	    	// Publish reports
+	    	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+		// Publish reports
 		echo 'Copying coverage report'
 		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-${env.BUILD_ID}"
 		script {
