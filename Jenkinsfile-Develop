@@ -16,7 +16,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run unit-test'
 		echo 'Copying coverage report'
-		sh 'cp -R coverage/lcov-report /var/www/html/coverage/${end.BUILD_NAME}'
+		sh 'cp -R coverage/lcov-report /var/www/html/coverage/${env.BUILD_NAME}'
             }
         }
         stage('Build image') {
