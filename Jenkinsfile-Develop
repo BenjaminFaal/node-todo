@@ -16,10 +16,7 @@ pipeline {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
-		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Mocha icov HTML Report', reportTitles: ''])
-            	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
-	    }
-	    
+	    }	    
 	}
         stage('Build image') {
             steps {
@@ -58,16 +55,22 @@ pipeline {
                 sh "docker run --rm -p 8000:9090 -e ENVIRONMENT_DB=${params.ENVIRONMENT_DB} --link mongodb:mongodb -d --name=docker-todo-develop hansschollaardt/node-todo"
             }
         }
-    }
-    post {
-        always {
-	    	// Publish reports
+	stage('Publish reports')
+	{
+		// Publish reports
 		echo 'Copying coverage report'
 		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-${env.BUILD_ID}"
 		script {
 			def jshint_html = sh(script: "jshint --reporter=node_modules/jshint-html-reporter/reporter.js *.js app/**/*.js public/**/*.js || true" , returnStdout: true)
 			writeFile (file:"/var/www/html/coverage/develop-${env.BUILD_ID}/jshint.html", text: jshint_html)
 		}
+		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Mocha icov HTML Report', reportTitles: ''])
+            	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
+	}
+    }
+    post {
+        always {
+	    echo 'I will always execute :)'	
 	}
 	success {
             mail bcc: '', body: "Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'hansschollaardt@gmail.com', mimeType: 'text/html', replyTo: '', subject: "SUCCESS CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
