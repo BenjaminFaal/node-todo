@@ -8,7 +8,7 @@ pipeline {
     stages{
         stage('Initializing stage') {
             steps {
-	    	echo "Build name: ${env.BUILD_NAME}" 
+	    	sh "echo Build name: ${env.BUILD_NAME}" 
                 checkout scm
             }
         }
