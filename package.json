@@ -11,8 +11,9 @@
     "gulp-jshint": "^2.0.4",
     "gulp-jshint-file-reporter": "0.0.2",
     "gulp-jshint-xml-file-reporter": "^0.5.1",
-    "jshint": "^2.9.4",
+    "jshint": "^2.9.5",
     "jshint-checkstyle-file-reporter": "0.0.1",
+    "jshint-html-reporter": "^0.2.5",
     "jshint-stylish": "^2.2.1",
     "method-override": "^2.3.10",
     "mongoose": "^4.13.2",
@@ -29,5 +30,6 @@
     "test": "npm run unit-test && npm run selenium-test",
     "selenium-test": "protractor test/selenium/conf.js",
     "unit-test": "nyc --reporter=lcov mocha test/unittest/todo-spec.js --exit"
+	"jshint": "jshint --reporter=node_modules/jshint-html-reporter/reporter.js *.js public/**/*.js > coverage/jshint.html"
   }
 }
