@@ -5,11 +5,13 @@ pipeline {
         string(name: 'PORT', defaultValue: '1111')
 	string(name: 'ENVIRONMENT_DB', defaultValue: 'development')
     }
+    environment {
+        BRANCH_NAME = getGitBranchName()
+    } 
     stages{
         stage('Initializing stage') {
             steps {
 	    	checkout scm
-		BRANCH_NAME = getGitBranchName()
 		echo "Branch name: ${BRANCH_NAME}"  
 		echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
