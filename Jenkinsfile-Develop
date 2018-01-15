@@ -16,9 +16,9 @@ pipeline {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
+		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
             }
-	    publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
-        }
+	}
         stage('Build image') {
             steps {
                 script {
