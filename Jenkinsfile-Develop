@@ -9,13 +9,13 @@ pipeline {
         stage('Initializing stage') {
             steps {
                 checkout scm
-		echo pwd
             }
         }
         stage('Unit tests') {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
+		sh 'pwd'
             }
         }
         stage('Build image') {
