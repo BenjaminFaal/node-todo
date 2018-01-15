@@ -6,7 +6,8 @@ pipeline {
 	string(name: 'ENVIRONMENT_DB', defaultValue: 'development')
     }
     environment {
-        BRANCH_NAME = getGitBranchName(${env.BUILD_ID})
+    	BUILD_ID =  1 // ${env.BUILD_ID}
+        BRANCH_NAME = getGitBranchName(BUILD_ID)
     } 
     stages{
         stage('Initializing stage') {
