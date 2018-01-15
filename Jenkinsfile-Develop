@@ -8,9 +8,8 @@ pipeline {
     stages{
         stage('Initializing stage') {
             steps {
-	    	scmVars = checkout scm
- 		branchName = scmVars.GIT_BRANCH
-		echo branchName
+	    	checkout scm
+		echo scm.branches[0].name
 		echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
