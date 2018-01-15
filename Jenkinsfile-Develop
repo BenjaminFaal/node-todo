@@ -57,6 +57,7 @@ pipeline {
         }
 	stage('Publish reports')
 	{
+	    steps {
 		// Publish reports
 		echo 'Copying coverage report'
 		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-${env.BUILD_ID}"
@@ -66,6 +67,7 @@ pipeline {
 		}
 		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Mocha icov HTML Report', reportTitles: ''])
             	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
+	    }
 	}
     }
     post {
