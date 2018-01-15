@@ -66,7 +66,7 @@ pipeline {
 			writeFile (file:"/var/www/html/coverage/develop-${env.BUILD_ID}/jshint.html", text: jshint_html)
 		}
 		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Mocha icov HTML Report', reportTitles: ''])
-            	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
+            	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "/var/www/html/coverage/develop-${env.BUILD_ID}", reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
 	    }
 	}
     }
