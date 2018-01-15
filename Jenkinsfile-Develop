@@ -16,8 +16,10 @@ pipeline {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
-		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
-            }
+		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Mocha icov HTML Report', reportTitles: ''])
+            	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage', reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
+	    }
+	    
 	}
         stage('Build image') {
             steps {
