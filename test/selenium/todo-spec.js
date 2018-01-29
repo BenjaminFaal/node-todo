@@ -41,11 +41,11 @@ describe('todo add', function () {
         });
     });
 
-    it('should delete all todos', function () {
-        deleteAll();
-        browser.waitForAngular();
-        expect(element.all(by.cssContainingText(demoText)).count()).toEqual(0);
-    });
+//    it('should delete all todos', function () {
+//        deleteAll();
+//        browser.waitForAngular();
+//        expect(element.all(by.cssContainingText(demoText)).count()).toEqual(0);
+//    });
 
 });
 

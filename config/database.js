@@ -1,3 +1,3 @@
 module.exports = {
-    url : 'mongodb://root:todoroot@ds141274.mlab.com:41274/todo'
+    url : 'mongodb://172.17.0.5:27017/' + process.env.ENVIRONMENT_DB
 };

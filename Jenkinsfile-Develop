@@ -3,19 +3,21 @@ pipeline {
     tools {nodejs "node-6.11"}
     parameters {
         string(name: 'PORT', defaultValue: '1111')
+	string(name: 'ENVIRONMENT_DB', defaultValue: 'development')
     }
     stages{
         stage('Initializing stage') {
             steps {
-                checkout scm
+	    	checkout scm
+		echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
         stage('Unit tests') {
             steps {
                 sh 'npm install'
                 sh 'npm run unit-test'
-            }
-        }
+	    }	    
+	}
         stage('Build image') {
             steps {
                 script {
@@ -26,7 +28,7 @@ pipeline {
         stage('Deploy for integration test') {
            steps {
                sh "echo Running instance on port: ${params.PORT}"
-               sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-develop hansschollaardt/node-todo"
+               sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -e ENVIRONMENT_DB=testing --link mongodb:mongodb -d --name=test-develop hansschollaardt/node-todo"
             }
         }
         stage('Integration test image') {
@@ -38,20 +40,45 @@ pipeline {
         stage('Push image') {
             /* finally, if all went well: publish image */
             steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                       app.push("dev-${env.BUILD_NUMBER}")
-                       app.push("dev-latest")
-                    }
-                }
+				script {
+					docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+					   app.push("dev-${env.BUILD_NUMBER}")
+					   app.push("dev-latest")
+					}
+				}              
             }  
         }
         stage('Deploy Develop') {
             steps {
                 // continue even if container was not running (yet)
                 sh 'docker stop docker-todo-develop || true' 
-                sh 'docker run --rm -p 8000:9090 -d --name="docker-todo-develop" hansschollaardt/node-todo'
+                sh "docker run --rm -p 8000:9090 -e ENVIRONMENT_DB=${params.ENVIRONMENT_DB} --link mongodb:mongodb -d --name=docker-todo-develop hansschollaardt/node-todo"
             }
+        }
+	stage('Publish reports')
+	{
+	    steps {
+		// Publish reports
+		echo 'Copying coverage report'
+		sh "cp -R coverage/lcov-report /var/www/html/coverage/develop-${env.BUILD_ID}"
+		script {
+			def jshint_html = sh(script: "jshint --reporter=node_modules/jshint-html-reporter/reporter.js *.js app/**/*.js public/**/*.js || true" , returnStdout: true)
+			writeFile (file:"/var/www/html/coverage/develop-${env.BUILD_ID}/jshint.html", text: jshint_html)
+		}
+		publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Mocha icov HTML Report', reportTitles: ''])
+            	publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "/var/www/html/coverage/develop-${env.BUILD_ID}", reportFiles: 'jshint.html', reportName: 'JSHint Report', reportTitles: ''])
+	    }
+	}
+    }
+    post {
+        always {
+	    echo 'I will always execute :)'	
+	}
+	success {
+            mail bcc: '', body: "Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'hansschollaardt@gmail.com', mimeType: 'text/html', replyTo: '', subject: "SUCCESS CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
+        }
+        failure {
+	    mail bcc: '', body: "Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: 'hansschollaardt@gmail.com', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: "hansschollaardt@gmail.com";
         }
     }
 }
