@@ -23,21 +23,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy for integration test') {
-           steps {
-               script { 
-					sh "echo Running instance on port: ${params.PORT}"
-                    sh "docker run --rm -p ${params.PORT}:${params.PORT} -e PORT=${params.PORT} -d --name=test-productie hansschollaardt/node-todo"
-               }
-            }
-        }
-        stage('Test image') {
-            steps {
-                sh 'npm run selenium-test'	
-				sh 'docker stop test-productie || true'
-            }
-        }
+		
         stage('Push image') {
             steps {
                 script {
